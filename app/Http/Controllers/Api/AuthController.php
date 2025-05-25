@@ -22,7 +22,17 @@ class AuthController extends Controller
         $user = User::firstWhere('email', $request->email);
 
         return $this->ok('Successfully Logged In', [
-            'token' => $user->createToken('API token for ' . $user->email)->plainTextToken
+            'token' => $user->createToken(
+                'API token for ' . $user->email,
+                ['*'],
+                now()->addMonth())->plainTextToken
         ]);
+    }
+
+    public function logout(Request $request)
+    {
+        $request->user()->currentAccessToken()->delete();
+
+        return $this->ok('');
     }
 }
