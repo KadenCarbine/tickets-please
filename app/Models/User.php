@@ -11,7 +11,9 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
-
+/**
+ * @method static \App\Models\Ticket findOrFail(array $attributes = [])
+ */
 class User extends Authenticatable
 {
     /** @use HasFactory<\Database\Factories\UserFactory> */
@@ -56,7 +58,7 @@ class User extends Authenticatable
         return $this->hasMany(Ticket::class);
     }
 
-    public function scopeFilter(Builder $builder, QueryFilter $filters) 
+    public function scopeFilter(Builder $builder, QueryFilter $filters)
     {
         return $filters->applyFilters($builder);
     }

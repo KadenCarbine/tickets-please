@@ -7,13 +7,23 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+/**
+ * @method static \App\Models\Ticket create(array $attributes = [])
+ */
 
 class Ticket extends Model
 {
     /** @use HasFactory<\Database\Factories\TicketsFactory> */
     use HasFactory;
 
-    public function author() :BelongsTo 
+    protected $fillable = [
+        'user_id',
+        'title',
+        'description',
+        'status',
+    ];
+
+    public function author() :BelongsTo
     {
         return $this->belongsTo(User::class, 'user_id');
     }
