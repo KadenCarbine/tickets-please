@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api\V1;
 
 use App\Http\Requests\Api\V1\ReplaceTicketRequest;
 use App\Http\Requests\Api\V1\StoreTicketRequest;
+use App\Http\Requests\Api\V1\UpdateTicketRequest;
 use App\Models\Ticket;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\Request;
@@ -23,15 +24,7 @@ class AuthorsTicketController extends ApiController
 
     public function store($author_id, StoreTicketRequest $request)
     {
-
-        $model = [
-            'title' => $request->input('data.attributes.title'),
-            'description' => $request->input('data.attributes.description'),
-            'status' => $request->input('data.attributes.status'),
-            'user_id' => $author_id
-        ];
-
-        return new TicketResource(Ticket::create($model));
+        return new TicketResource(Ticket::create($request->mappedAttributes()));
     }
 
     /**
@@ -43,15 +36,26 @@ class AuthorsTicketController extends ApiController
             $ticket = Ticket::findOrFail($ticketId);
 
             if($ticket->user_id == $authorId) {
+                $ticket->update($request->mappedAttributes());
+                return new TicketResource($ticket);
+            }
 
-                $model = [
-                    'title' => $request->input('data.attributes.title'),
-                    'description' => $request->input('data.attributes.description'),
-                    'status' => $request->input('data.attributes.status'),
-                    'user_id' => $request->input('data.relationships.author.data.id'),
-                ];
 
-                $ticket->update($model);
+        } catch (ModelNotFoundException $e) {
+            $this->error('Ticket not found', 404);
+        }
+    }
+
+    /**
+     * Replace the specified resource in storage.
+     */
+    public function update(UpdateTicketRequest $request, $authorId, $ticketId)
+    {
+        try {
+            $ticket = Ticket::findOrFail($ticketId);
+
+            if($ticket->user_id == $authorId) {
+                $ticket->update($request->mappedAttributes());
                 return new TicketResource($ticket);
             }
 

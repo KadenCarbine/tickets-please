@@ -2,9 +2,9 @@
 
 namespace App\Http\Requests\Api\V1;
 
-use Illuminate\Foundation\Http\FormRequest;
 
-class StoreTicketRequest extends FormRequest
+use App\Http\Requests\Api\V1\BaseTicketRequest;
+class StoreTicketRequest extends BaseTicketRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -33,10 +33,4 @@ class StoreTicketRequest extends FormRequest
         return $rules;
     }
 
-    public function messages(): array
-    {
-        return [
-            'data.attributes.status' => 'The ticket status must be active, completed, hold, or closed.',
-        ];
-    }
 }
