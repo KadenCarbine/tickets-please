@@ -10,6 +10,9 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 /**
  * @method static \App\Models\Ticket create(array $attributes = [])
  */
+/**
+ * @method static \App\Models\Ticket findOrFail(int)
+ */
 
 class Ticket extends Model
 {
