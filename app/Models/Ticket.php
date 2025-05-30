@@ -3,20 +3,22 @@
 namespace App\Models;
 
 use App\Http\Filters\V1\QueryFilter;
-use Illuminate\Database\Eloquent\Model;
+use Database\Factories\TicketsFactory;
 use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+
 /**
- * @method static \App\Models\Ticket create(array $attributes = [])
- */
-/**
- * @method static \App\Models\Ticket findOrFail(int)
+ * @method static Ticket create(array $attributes = [])
  */
 
+/**
+ * @method static Ticket findOrFail(int)
+ */
 class Ticket extends Model
 {
-    /** @use HasFactory<\Database\Factories\TicketsFactory> */
+    /** @use HasFactory<TicketsFactory> */
     use HasFactory;
 
     protected $fillable = [
@@ -26,12 +28,13 @@ class Ticket extends Model
         'status',
     ];
 
-    public function author() :BelongsTo
+    public function author(): BelongsTo
     {
         return $this->belongsTo(User::class, 'user_id');
     }
 
-    public function scopeFilter(Builder $builder, QueryFilter $filters) {
+    public function scopeFilter(Builder $builder, QueryFilter $filters)
+    {
         return $filters->applyFilters($builder);
     }
 }

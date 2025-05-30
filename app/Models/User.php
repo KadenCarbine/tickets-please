@@ -5,18 +5,20 @@ namespace App\Models;
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
 
 use App\Http\Filters\V1\QueryFilter;
+use Database\Factories\UserFactory;
 use Illuminate\Contracts\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
+
 /**
- * @method static \App\Models\Ticket findOrFail(array $attributes = [])
+ * @method static Ticket findOrFail(array $attributes = [])
  */
 class User extends Authenticatable
 {
-    /** @use HasFactory<\Database\Factories\UserFactory> */
+    /** @use HasFactory<UserFactory> */
     use HasApiTokens, HasFactory, Notifiable;
 
     /**
@@ -40,6 +42,16 @@ class User extends Authenticatable
         'remember_token',
     ];
 
+    public function tickets(): HasMany
+    {
+        return $this->hasMany(Ticket::class);
+    }
+
+    public function scopeFilter(Builder $builder, QueryFilter $filters)
+    {
+        return $filters->applyFilters($builder);
+    }
+
     /**
      * Get the attributes that should be cast.
      *
@@ -51,15 +63,5 @@ class User extends Authenticatable
             'email_verified_at' => 'datetime',
             'password' => 'hashed',
         ];
-    }
-
-    public function tickets() :HasMany
-    {
-        return $this->hasMany(Ticket::class);
-    }
-
-    public function scopeFilter(Builder $builder, QueryFilter $filters)
-    {
-        return $filters->applyFilters($builder);
     }
 }

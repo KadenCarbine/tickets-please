@@ -2,10 +2,11 @@
 
 namespace Database\Seeders;
 
-use App\Models\User;
-// use Illuminate\Database\Console\Seeds\WithoutModelEvents;
-use Illuminate\Database\Seeder;
 use App\Models\Ticket;
+use App\Models\User;
+use Illuminate\Database\Seeder;
+
+// use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 
 class DatabaseSeeder extends Seeder
 {
@@ -19,5 +20,12 @@ class DatabaseSeeder extends Seeder
         Ticket::factory(100)
             ->recycle($users)
             ->create();
+
+        User::create([
+            'email' => 'manager@manager.com',
+            'password' => bcrypt('manager'),
+            'name' => 'Manager',
+            'is_manager' => true,
+        ]);
     }
 }
